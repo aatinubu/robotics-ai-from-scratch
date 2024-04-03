@@ -1,0 +1,37 @@
+{
+    "name": "RoboticsAIfromScratch",
+    "privileged": true,
+    "remoteUser": "ghost",
+    "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile"
+    },
+    "runArgs": [
+        "--name",
+        "robotics-ai-from-scratch",
+        "--shm-size=3gb",
+        "--network=host"
+    ],
+    "workspaceFolder": "/home/ghost/ws",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/ghost/ws,type=bind",
+    "containerEnv": {
+        "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+        "ROS_DOMAIN_ID": "42"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/desktop-lite:1.0.8": {}
+    },
+    "forwardPorts": [
+        6080,
+        5901
+    ],
+    "portsAttributes": {
+        "6080": {
+            "label": "Desktop (Web)"
+        },
+        "5901": {
+            "label": "Dektop (VNC)"
+        }
+    },
+    "postCreateCommand": "sudo chmod u+x .devcontainer/postCreateCommand.sh && ./.devcontainer/postCreateCommand.sh"
+}

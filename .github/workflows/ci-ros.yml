@@ -1,0 +1,68 @@
+name: build and test
+
+on: [push, pull_request]
+
+jobs:
+  fetch-packages:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.set-packages.outputs.packages }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Setup ROS2
+      uses: ros-tooling/setup-ros@v0.7
+      with:
+          required-ros-distributions: humble
+
+    - name: Fetch package names
+      id: set-packages
+      run: |
+        packages=$(colcon list --names-only)
+        packages_json=$(echo "$packages" | jq -R -s -c 'split("\n")[:-1]')
+        echo "::set-output name=packages::$packages_json"
+
+  build-and-test:
+    needs: fetch-packages
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package-name: ${{ fromJson(needs.fetch-packages.outputs.packages) }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Setup ROS2
+      uses: ros-tooling/setup-ros@v0.7
+      with:
+          required-ros-distributions: humble
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt install -y python3-opencv
+        pip3 install numpy --upgrade
+        pip3 install ipython
+        pip3 install scikit-learn
+        pip3 install matplotlib
+        pip3 install tensorboard
+        pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+    - name: List packages
+      run: |
+        echo "Packages: ${{ matrix.package-name }}"
+      
+    - name: Build and run tests
+      uses: ros-tooling/action-ros-ci@v0.3
+      with:
+        package-name: ${{ matrix.package-name }}
+        target-ros2-distro: humble
+        colcon-defaults: '{"build":{"cmake-args":["-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"]}}'        
+
+    - name: Upload Logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: colcon-logs
+        path: log
+      if: always()

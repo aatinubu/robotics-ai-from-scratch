@@ -1,0 +1,76 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "detail": "build workspace",
+      "type": "shell",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "command": "source /opt/ros/$ROS_DISTRO/setup.bash; colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_CXX_FLAGS='-Wall -Wextra -Wpedantic'"
+    },
+    {
+      "label": "test",
+      "detail": "run tests",
+      "type": "shell",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "command": "source /opt/ros/$ROS_DISTRO/setup.sh; colcon test; colcon test-result --verbose > test-results.txt"
+    },
+    {
+      "label": "delete build",
+      "detail": "delete build, install and log directories",
+      "type": "shell",
+      "command": "sudo rm -rf build install log; sudo py3clean",
+      "problemMatcher": []
+    },
+    {
+      "label": "clang format",
+      "detail": "format projects with clang format",
+      "type": "shell",
+      "command": "find ./src/ -path ./src/example -prune -o \\( -iname '*.h' -o -iname '*.cpp' \\) -print | xargs -I {} clang-format -i {}",
+      "problemMatcher": []
+    },
+    {
+      "label": "cppcheck",
+      "detail": "run static code analyzer with cppcheck",
+      "type": "shell",
+      "command": "cppcheck --project=build/compile_commands.json --suppress='*:*/opt/ros/${env:ROS_DISTRO}/src/*' -i ./src/example -i ./install -i ./build --error-exitcode=1 --output-file=cppcheck-report.txt > cppcheck-report-utf8.txt 2>&1",
+      "problemMatcher": [],
+    },
+    {
+      "label": "create ROS cpp package",
+      "detail": "create a new ROS cpp package",
+      "type": "shell",
+      "command": "source /opt/ros/$ROS_DISTRO/setup.bash; ros2 pkg create --destination-directory src --build-type ament_cmake ${input:package}",
+      "problemMatcher": []
+    },
+    {
+      "label": "create ROS python package",
+      "detail": "create a new ROS python package",
+      "type": "shell",
+      "command": "source /opt/ros/$ROS_DISTRO/setup.bash; ros2 pkg create --destination-directory src --build-type ament_python ${input:package}",
+      "problemMatcher": []
+    },
+    {
+      "label": "install dependencies",
+      "detail": "install all dependencies specified in the workspaces package.xml files.",
+      "type": "shell",
+      "command": "sudo apt-get update && rosdep update && rosdep install --from-paths src --ignore-src -y",
+      "problemMatcher": []
+    },
+  ],
+  "inputs": [
+    {
+      "id": "package",
+      "type": "promptString",
+      "description": "Package name"
+    }
+  ]
+}
