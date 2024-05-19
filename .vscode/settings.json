@@ -85,5 +85,8 @@
         "typeinfo": "cpp",
         "variant": "cpp"
     },
-    "python.analysis.autoImportCompletions": true
+    "python.analysis.autoImportCompletions": true,
+    "editor.fontSize": 18,
+    "debug.console.fontSize": 18,
+    "terminal.integrated.fontSize": 18
 }

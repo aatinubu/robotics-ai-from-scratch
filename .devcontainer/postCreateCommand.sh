@@ -12,9 +12,9 @@ sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1
     -p git \
     -p ssh-agent \
     -p https://github.com/zsh-users/zsh-autosuggestions \
-    -p https://github.com/marlonrichert/zsh-autocomplete \
     -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -p https://github.com/MichaelAquilina/zsh-you-should-use
+    -p https://github.com/MichaelAquilina/zsh-you-should-use \
+    -p https://github.com/marlonrichert/zsh-autocomplete 
 
 mkdir -p /home/$USERNAME/.cache/zsh
 eval "$(ssh-agent -s)"
