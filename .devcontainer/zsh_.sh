@@ -2,6 +2,8 @@
 source /opt/ros/$ROS_DISTRO/setup.zsh
 source /home/$USERNAME/ws/install/setup.zsh
 
+setopt nomatch
+
 alias sz="source ~/.zshrc"
 alias ez="code ~/.zshrc"
 
