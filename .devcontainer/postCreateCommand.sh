@@ -21,7 +21,7 @@ eval "$(ssh-agent -s)"
 
 cat /home/$USERNAME/ws/.devcontainer/zsh_.sh >> /home/$USERNAME/.zshrc
 
-echo "export XDG_RUNTIME_DIR='/tmp/runtime-$(whoami)'" >> /home/$USERNAME/.zshrc
+echo "\nexport XDG_RUNTIME_DIR='/tmp/runtime-$(whoami)'" >> /home/$USERNAME/.zshrc
 
 sudo apt-get install -y ros-$ROS_DISTRO-ros2-control ros-$ROS_DISTRO-ros2-controllers ros-$ROS_DISTRO-xacro ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-rviz2
 sudo apt-get install -y ros-$ROS_DISTRO-pcl-conversions
