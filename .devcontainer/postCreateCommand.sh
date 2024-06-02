@@ -7,7 +7,7 @@ rosdep update && rosdep install --from-paths src --ignore-src -y && sudo chown -
 source /opt/ros/$ROS_DISTRO/setup.sh; 
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DCMAKE_CXX_FLAGS='-Wall -Wextra -Wpedantic'
 
-sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
+sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.0/zsh-in-docker.sh)" -- \
     -t takashiyoshida \
     -p git \
     -p ssh-agent \
